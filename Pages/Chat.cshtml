@@ -1,0 +1,203 @@
+@page
+@model SignalRChatLab.Pages.ChatModel
+@{
+    ViewData["Title"] = "Realtime Chat";
+    ViewData["HideNavbar"] = true;
+    ViewData["HideFooter"] = true;
+    ViewData["UseFluidContainer"] = true;
+}
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
+
+<div class="chat-wrapper position-relative">
+    
+    <!-- Drag & Drop overlay -->
+    <div id="dragDropOverlay" class="drag-drop-overlay">
+        <span class="material-symbols-outlined text-primary" style="font-size: 4rem;">upload_file</span>
+        <h3 class="fw-bold">Drop files here to upload</h3>
+        <p class="text-muted">Images, PDFs, Word docs, and Zip archives are supported.</p>
+    </div>
+
+    <!-- Join Chat Glassmorphic Overlay -->
+    <div id="joinOverlay" class="join-chat-overlay">
+        <div class="join-chat-card text-center">
+            <div class="rounded bg-primary d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 48px; height: 48px;">
+                <span class="material-symbols-outlined fs-2">school</span>
+            </div>
+            <h3 class="fw-bold text-primary mb-2">Join Lab 3 Chat</h3>
+            <p class="text-muted small mb-4">Enter your username to connect to the realtime chat room</p>
+            <form id="joinForm">
+                <div class="text-start mb-3">
+                    <label for="userNameInput" class="form-label small fw-bold text-secondary">Username</label>
+                    <input id="userNameInput" type="text" class="form-control py-2" placeholder="e.g. John" maxlength="30" autocomplete="off" required />
+                </div>
+                <button id="joinButton" type="submit" class="btn btn-primary w-100 py-2 fw-semibold d-flex align-items-center justify-content-center gap-2">
+                    <span>Connect</span>
+                    <span class="material-symbols-outlined">chevron_right</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SideNavBar (Left Pane) -->
+    <aside class="chat-sidebar p-3 gap-3">
+        <div class="d-flex flex-column gap-1 mb-2">
+            <div class="d-flex align-items-center gap-3">
+                <div class="rounded bg-primary d-flex align-items-center justify-content-center text-white" style="width: 40px; height: 40px;">
+                    <span class="material-symbols-outlined">school</span>
+                </div>
+                <div>
+                    <h1 class="fs-5 fw-bold text-primary m-0 lh-1">Lab 3</h1>
+                    <span class="text-muted" style="font-size: 0.75rem;">Realtime Chat Application</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex-grow-1 d-flex flex-column gap-2 overflow-y-auto chat-scroller">
+            <h2 class="text-uppercase text-secondary fw-semibold px-2 mb-2" style="font-size: 0.75rem; letter-spacing: 0.05em;">Online Users</h2>
+            <div id="onlineUsersList" class="d-flex flex-column gap-1">
+                <!-- Dynamically rendered user buttons -->
+            </div>
+        </div>
+
+        <div class="mt-auto pt-3 border-top border-light-subtle">
+            <div class="d-flex align-items-center gap-3 p-1">
+                <div class="rounded border d-flex align-items-center justify-content-center bg-white" style="width: 40px; height: 40px;">
+                    <span class="material-symbols-outlined text-primary">assignment</span>
+                </div>
+                <div class="d-flex flex-column">
+                    <span class="small fw-bold text-dark">University Assignment</span>
+                    <span class="text-muted" style="font-size: 0.65rem;">v1.2.0-stable</span>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Canvas (Right Pane) -->
+    <main class="chat-main-panel">
+        
+        <!-- Top Header Toolbar -->
+        <header class="d-flex align-items-center justify-content-between px-4 border-bottom bg-white" style="height: 64px; flex-shrink: 0;">
+            <div class="d-flex align-items-center gap-3">
+                <h2 class="fs-5 fw-bold m-0 text-dark">Realtime Chat Room</h2>
+                <div class="vr bg-secondary opacity-25" style="height: 16px;"></div>
+                <div class="d-flex align-items-center gap-2">
+                    <span id="connectionDot" class="rounded-circle status-dot-online" style="width: 8px; height: 8px;"></span>
+                    <span id="connectionStatusText" class="small fw-semibold text-secondary">Offline</span>
+                </div>
+                <div id="typersAlert" class="small text-muted ms-3 d-flex align-items-center gap-2">
+                    <!-- Typing state display -->
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-2">
+                <button class="btn btn-link p-2 text-secondary rounded-circle" style="width: 40px; height: 40px;">
+                    <span class="material-symbols-outlined">group</span>
+                </button>
+                <button class="btn btn-link p-2 text-secondary rounded-circle" style="width: 40px; height: 40px;">
+                    <span class="material-symbols-outlined">more_vert</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- Messages Area viewport -->
+        <div id="messagesList" class="chat-messages-viewport chat-scroller d-flex flex-column gap-3 position-relative">
+            <!-- Onboarding Empty State -->
+            <div id="emptyState" class="chat-empty-state my-auto">
+                <span class="material-symbols-outlined text-secondary mb-3" style="font-size: 4rem;">forum</span>
+                <h4 class="fw-bold text-dark">Welcome to the Realtime Chat Room</h4>
+                <p class="text-muted small">Start a conversation with your classmates to begin.</p>
+            </div>
+        </div>
+
+        <!-- Composer Footer Form -->
+        <footer class="chat-composer-wrapper">
+            <div class="mx-auto" style="max-width: 800px; position: relative;">
+                
+                <!-- Upload Panel (Shared Progress Card) -->
+                <div id="uploadPanelContainer" class="d-flex flex-column gap-2">
+                    <!-- Dynamic Upload Progress cards go here -->
+                </div>
+
+                <!-- Image Preview Card before send -->
+                <div id="imagePreviewCard" class="image-preview-send-card d-none">
+                    <img id="imagePreviewImg" class="image-preview-send-thumbnail" src="" alt="preview" />
+                    <div class="flex-grow-1 min-w-0">
+                        <div id="imagePreviewName" class="text-dark small text-truncate fw-semibold">image.png</div>
+                        <div id="imagePreviewSize" class="text-muted" style="font-size: 0.7rem;">0 KB</div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button id="imagePreviewCancelBtn" class="btn btn-sm btn-outline-secondary py-1 px-2" type="button" style="font-size: 0.75rem;">Remove</button>
+                        <button id="imagePreviewSendBtn" class="btn btn-sm btn-primary py-1 px-3" type="button" style="font-size: 0.75rem;">Send</button>
+                    </div>
+                </div>
+
+                <!-- Input box and tools container -->
+                <div class="chat-composer-box">
+                    <textarea id="messageInput" class="chat-composer-textarea" placeholder="Type a message..." rows="2" disabled></textarea>
+                    
+                    <div class="d-flex align-items-center justify-content-between border-top pt-2 px-2 mt-1">
+                        <div class="d-flex align-items-center gap-1">
+                            <!-- Emoji trigger button -->
+                            <button id="emojiTriggerBtn" class="btn btn-link p-2 text-secondary rounded" type="button" style="width: 38px; height: 38px;" disabled>
+                                <span class="material-symbols-outlined">mood</span>
+                            </button>
+                            <!-- Image input trigger -->
+                            <button id="imageTriggerBtn" class="btn btn-link p-2 text-secondary rounded" type="button" style="width: 38px; height: 38px;" disabled>
+                                <span class="material-symbols-outlined">image</span>
+                            </button>
+                            <!-- File input trigger -->
+                            <button id="fileTriggerBtn" class="btn btn-link p-2 text-secondary rounded" type="button" style="width: 38px; height: 38px;" disabled>
+                                <span class="material-symbols-outlined">attach_file</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Send Text Button -->
+                        <button id="sendButton" class="btn btn-primary px-4 py-2 d-flex align-items-center gap-2" type="submit" disabled>
+                            <span>Send</span>
+                            <span class="material-symbols-outlined" style="font-size: 18px; font-variation-settings: 'FILL' 1;">send</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Hidden inputs for triggers -->
+                <form id="uploadForm" class="d-none" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input id="imageFileInput" type="file" accept=".jpg,.jpeg,.png,.gif,.webp" class="d-none" />
+                    <input id="generalFileInput" type="file" accept=".pdf,.docx,.txt,.zip" class="d-none" />
+                </form>
+
+                <!-- Floating Emoji Grid Popover -->
+                <div id="emojiPopover" class="emoji-picker-popover d-none">
+                    <div class="emoji-grid">
+                        <button type="button" class="emoji-picker-btn">😀</button>
+                        <button type="button" class="emoji-picker-btn">😂</button>
+                        <button type="button" class="emoji-picker-btn">😍</button>
+                        <button type="button" class="emoji-picker-btn">👍</button>
+                        <button type="button" class="emoji-picker-btn">🎉</button>
+                        <button type="button" class="emoji-picker-btn">🔥</button>
+                        <button type="button" class="emoji-picker-btn">❤️</button>
+                        <button type="button" class="emoji-picker-btn">🙏</button>
+                        <button type="button" class="emoji-picker-btn">🤔</button>
+                        <button type="button" class="emoji-picker-btn">😎</button>
+                        <button type="button" class="emoji-picker-btn">🚀</button>
+                        <button type="button" class="emoji-picker-btn">👏</button>
+                        <button type="button" class="emoji-picker-btn">✨</button>
+                        <button type="button" class="emoji-picker-btn">💡</button>
+                        <button type="button" class="emoji-picker-btn">💯</button>
+                        <button type="button" class="emoji-picker-btn">😭</button>
+                    </div>
+                </div>
+
+                <div class="text-center mt-2">
+                    <span class="text-muted" style="font-size: 0.7rem;">Press Enter to send, Shift + Enter for new line</span>
+                </div>
+            </div>
+        </footer>
+    </main>
+</div>
+
+@section Scripts {
+    <script src="~/lib/signalr/signalr.min.js"></script>
+    <script src="~/js/chat.js" asp-append-version="true"></script>
+}
