@@ -18,8 +18,9 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
-  background: #f4f7fb;
+  margin-bottom: 0;
+  background: var(--color-surface);
+  color: var(--color-on-surface);
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
@@ -236,26 +237,27 @@ body {
   }
 }
 
-/* Stitch Realtime Chat Layout Custom Styles */
 :root {
-  --color-surface: #f7f9ff;
-  --color-surface-subtle: #F8F9FA;
-  --color-surface-container: #ebeef3;
-  --color-surface-container-low: #f1f4f9;
-  --color-surface-container-lowest: #ffffff;
-  --color-on-surface: #181c20;
-  --color-on-surface-variant: #424655;
-  --color-primary: #0057cd;
-  --color-primary-container: #0d6efd;
+  --color-surface: #06060c;
+  --color-surface-subtle: #0a0a14;
+  --color-surface-container: #121226;
+  --color-surface-container-low: #080811;
+  --color-surface-container-lowest: #020205;
+  --color-on-surface: #f3f4f6;
+  --color-on-surface-variant: #9ca3af;
+  --color-primary: #5e6ad2;
+  --color-primary-container: #5e6ad2;
   --color-on-primary-container: #ffffff;
   --color-primary-fixed: #dae2ff;
-  --color-outline: #727787;
-  --color-outline-variant: #c2c6d8;
-  --color-border-default: #DEE2E6;
-  --color-status-online: #198754;
-  --color-status-away: #FFC107;
-  --color-status-busy: #DC3545;
+  --color-outline: #4b5563;
+  --color-outline-variant: rgba(255, 255, 255, 0.08);
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-status-online: #10b981;
+  --color-status-away: #eab308;
+  --color-status-busy: #ef4444;
   --sidebar-width: 320px;
+  --color-bg-elevated: rgba(255, 255, 255, 0.04);
+  --color-accent-glow: rgba(94, 106, 210, 0.25);
 }
 
 /* Material Icons Font Style overrides */
@@ -800,13 +802,14 @@ body {
 }
 
 .join-chat-card {
-  background: #ffffff;
+  background: rgba(10, 10, 18, 0.85);
   border-radius: 1rem;
   border: 1px solid var(--color-border-default);
   padding: 2.5rem;
   width: 100%;
   max-width: 420px;
-  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 0 40px var(--color-accent-glow);
+  backdrop-filter: blur(16px);
 }
 
 /* Empty State Onboarding */
@@ -817,5 +820,142 @@ body {
   justify-content: center;
   text-align: center;
   padding: 4rem 2rem;
-  color: var(--color-outline);
+  color: var(--color-on-surface-variant);
+}
+
+/* Cinematic Dark Mode Overrides for Bootstrap Components inside Chat Workspace */
+.chat-wrapper .bg-white {
+  background-color: var(--color-surface-subtle) !important;
+}
+.chat-wrapper .text-dark {
+  color: var(--color-on-surface) !important;
+}
+.chat-wrapper .text-muted {
+  color: var(--color-on-surface-variant) !important;
+}
+.chat-wrapper .border,
+.chat-wrapper .border-top,
+.chat-wrapper .border-bottom,
+.chat-wrapper .border-light-subtle {
+  border-color: var(--color-border-default) !important;
+}
+
+/* Outgoing/Incoming Bubbles */
+.message-bubble-container.outgoing .message-bubble {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #3b82f6 100%) !important;
+  color: #ffffff !important;
+  border-color: transparent !important;
+  box-shadow: 0 4px 16px var(--color-accent-glow) !important;
+}
+.message-bubble {
+  background-color: var(--color-bg-elevated) !important;
+  border-color: var(--color-border-default) !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* Active User Sidebar Button */
+.user-sidebar-btn.active-user {
+  background-color: rgba(94, 106, 210, 0.16) !important;
+  color: #a5b4fc !important;
+  border: 1px solid rgba(94, 106, 210, 0.3) !important;
+}
+.user-sidebar-btn:hover:not(.active-user) {
+  background-color: var(--color-surface-container) !important;
+}
+
+/* Input Composer Overrides */
+.chat-composer-box {
+  background-color: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border-default) !important;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4) !important;
+}
+.chat-composer-box:focus-within {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-accent-glow) !important;
+}
+.chat-composer-textarea {
+  background-color: transparent !important;
+  color: var(--color-on-surface) !important;
+}
+
+/* Emoji Picker Overrides */
+.emoji-picker-popover {
+  background: rgba(10, 10, 18, 0.85) !important;
+  border: 1px solid var(--color-border-default) !important;
+  backdrop-filter: blur(16px);
+  color: var(--color-on-surface);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6) !important;
+}
+.emoji-search-wrapper,
+.emoji-category-tabs {
+  background: rgba(10, 10, 18, 0.95) !important;
+  border-bottom: 1px solid var(--color-border-default) !important;
+}
+.emoji-search-input {
+  background: rgba(255, 255, 255, 0.02) !important;
+  border: 1px solid var(--color-border-default) !important;
+  color: var(--color-on-surface) !important;
+  border-radius: 6px;
+  padding: 0.35rem 0.65rem;
+}
+.emoji-tab-btn:hover {
+  background-color: var(--color-surface-container) !important;
+}
+.emoji-tab-btn.active {
+  background-color: var(--color-surface-container) !important;
+  border-bottom-color: var(--color-primary) !important;
+}
+.emoji-section-header {
+  background: rgba(10, 10, 18, 0.95) !important;
+  color: var(--color-on-surface-variant) !important;
+  border-bottom: 1px solid var(--color-border-default) !important;
+}
+.emoji-picker-btn:hover {
+  background-color: var(--color-surface-container) !important;
+}
+
+/* Attachment & Upload progress card Overrides */
+.chat-attached-file-card {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--color-border-default) !important;
+  color: var(--color-on-surface) !important;
+}
+.upload-progress-card {
+  background-color: rgba(10, 10, 18, 0.8) !important;
+  border: 1px solid var(--color-border-default) !important;
+  color: var(--color-on-surface) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5) !important;
+}
+.upload-progress-card.failed {
+  border-color: rgba(239, 68, 68, 0.4) !important;
+  background-color: rgba(239, 68, 68, 0.1) !important;
+}
+.upload-progress-card.success {
+  border-color: rgba(16, 185, 129, 0.4) !important;
+  background-color: rgba(16, 185, 129, 0.1) !important;
+}
+
+/* Drag & drop overlay Overrides */
+.drag-drop-overlay {
+  background-color: rgba(10, 10, 18, 0.85) !important;
+  backdrop-filter: blur(8px);
+  border: 3px dashed var(--color-primary) !important;
+  color: var(--color-on-surface);
+}
+
+/* Preview Image Send Card Overrides */
+.image-preview-send-card {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--color-border-default) !important;
+  backdrop-filter: blur(12px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.4) !important;
+}
+
+/* Custom scrollbars for chat */
+.chat-scroller::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+.chat-scroller::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
 }

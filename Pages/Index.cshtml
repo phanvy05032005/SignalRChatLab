@@ -1,10 +1,1007 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "SignalRChatLab - Next-Gen Realtime Messaging";
+    ViewData["HideNavbar"] = true;
+    ViewData["HideFooter"] = true;
+    ViewData["UseFluidContainer"] = true;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+<style>
+    /* Reset and Layout */
+    :root {
+        --color-bg-deep: #020205;
+        --color-bg-base: #06060c;
+        --color-bg-elevated: rgba(255, 255, 255, 0.03);
+        --color-border-subtle: rgba(255, 255, 255, 0.08);
+        --color-border-hover: rgba(255, 255, 255, 0.16);
+        --color-accent: #5e6ad2;
+        --color-accent-glow: rgba(94, 106, 210, 0.25);
+        --color-text-primary: #f3f4f6;
+        --color-text-muted: #9ca3af;
+        --color-online: #10b981;
+        --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: var(--color-bg-deep);
+        color: var(--color-text-primary);
+        font-family: var(--font-sans);
+        overflow-x: hidden;
+        min-height: 100vh;
+        position: relative;
+    }
+
+    /* Ambient Glow Background Orbs */
+    .ambient-background {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .glow-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(140px);
+        opacity: 0.12;
+        mix-blend-mode: screen;
+        animation: rotateOrbs 25s infinite alternate ease-in-out;
+    }
+
+    .orb-1 {
+        width: 600px;
+        height: 600px;
+        background: radial-gradient(circle, #5e6ad2 0%, transparent 80%);
+        top: -200px;
+        left: -100px;
+    }
+
+    .orb-2 {
+        width: 500px;
+        height: 500px;
+        background: radial-gradient(circle, #3b82f6 0%, transparent 80%);
+        bottom: -100px;
+        right: -100px;
+        animation-delay: -5s;
+    }
+
+    .orb-3 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, #8b5cf6 0%, transparent 80%);
+        top: 40%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation-delay: -10s;
+    }
+
+    @@keyframes rotateOrbs {
+        0% {
+            transform: translate(0, 0) scale(1);
+        }
+        50% {
+            transform: translate(50px, -80px) scale(1.1);
+        }
+        100% {
+            transform: translate(-30px, 40px) scale(0.95);
+        }
+    }
+
+    /* Page Container */
+    .landing-wrapper {
+        position: relative;
+        z-index: 10;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        box-sizing: border-box;
+    }
+
+    /* Custom Header */
+    .custom-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.5rem 0;
+        margin-bottom: 2rem;
+    }
+
+    .brand-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        text-decoration: none;
+        color: var(--color-text-primary);
+        font-weight: 700;
+        font-size: 1.25rem;
+        letter-spacing: -0.025em;
+        transition: opacity 0.2s ease;
+    }
+
+    .brand-logo:hover {
+        opacity: 0.9;
+        color: var(--color-text-primary);
+    }
+
+    .brand-logo svg {
+        color: var(--color-accent);
+        filter: drop-shadow(0 0 8px var(--color-accent-glow));
+    }
+
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    .nav-link-item {
+        color: var(--color-text-muted);
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: color 0.2s ease;
+    }
+
+    .nav-link-item:hover {
+        color: var(--color-text-primary);
+    }
+
+    .nav-cta {
+        background: var(--color-bg-elevated);
+        border: 1px solid var(--color-border-subtle);
+        color: var(--color-text-primary);
+        padding: 0.5rem 1.25rem;
+        border-radius: 999px;
+        text-decoration: none;
+        font-size: 0.875rem;
+        font-weight: 600;
+        backdrop-filter: blur(8px);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .nav-cta:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--color-border-hover);
+        color: var(--color-text-primary);
+        transform: translateY(-1px);
+    }
+
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        padding: 4rem 0 3rem 0;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: rgba(94, 106, 210, 0.1);
+        border: 1px solid rgba(94, 106, 210, 0.25);
+        color: #a5b4fc;
+        padding: 0.35rem 0.85rem;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        backdrop-filter: blur(8px);
+    }
+
+    .hero-badge .online-pulse {
+        width: 6px;
+        height: 6px;
+        background-color: var(--color-online);
+        border-radius: 50%;
+        box-shadow: 0 0 8px var(--color-online);
+        animation: pulseDot 2s infinite;
+    }
+
+    @@keyframes pulseDot {
+        0% { transform: scale(0.95); opacity: 0.5; }
+        50% { transform: scale(1.15); opacity: 1; }
+        100% { transform: scale(0.95); opacity: 0.5; }
+    }
+
+    .hero-title {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1.15;
+        letter-spacing: -0.03em;
+        margin: 0 0 1.25rem 0;
+        background: linear-gradient(to bottom, #ffffff 40%, #a3a3a3 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+        font-size: 1.125rem;
+        color: var(--color-text-muted);
+        line-height: 1.6;
+        margin: 0 0 2.5rem 0;
+        font-weight: 400;
+    }
+
+    .hero-ctas {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .btn-primary-glow {
+        background: linear-gradient(135deg, var(--color-accent) 0%, #3b82f6 100%);
+        color: #ffffff;
+        padding: 0.75rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        box-shadow: 0 4px 20px rgba(94, 106, 210, 0.4);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        border: none;
+    }
+
+    .btn-primary-glow:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 24px rgba(94, 106, 210, 0.55);
+        color: #ffffff;
+    }
+
+    .btn-secondary-outline {
+        background: var(--color-bg-elevated);
+        border: 1px solid var(--color-border-subtle);
+        color: var(--color-text-primary);
+        padding: 0.75rem 2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        backdrop-filter: blur(8px);
+        transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .btn-secondary-outline:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-color: var(--color-border-hover);
+        transform: translateY(-1px);
+        color: var(--color-text-primary);
+    }
+
+    /* Live Preview / Interactive Console Box */
+    .preview-container {
+        margin: 3.5rem auto 5rem auto;
+        max-width: 680px;
+        width: 100%;
+        perspective: 1000px;
+    }
+
+    .glass-console {
+        background: rgba(10, 10, 18, 0.6);
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 1rem;
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.8), 0 0 50px -10px var(--color-accent-glow);
+        backdrop-filter: blur(20px);
+        overflow: hidden;
+        transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .console-header {
+        background: rgba(255, 255, 255, 0.02);
+        padding: 0.75rem 1.25rem;
+        border-bottom: 1px solid var(--color-border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .console-dots {
+        display: flex;
+        gap: 0.35rem;
+    }
+
+    .console-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+    }
+
+    .dot-red { background: #ef4444; }
+    .dot-yellow { background: #eab308; }
+    .dot-green { background: #22c55e; }
+
+    .console-title {
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .console-status-dot {
+        width: 6px;
+        height: 6px;
+        background-color: var(--color-online);
+        border-radius: 50%;
+    }
+
+    .console-viewport {
+        height: 250px;
+        overflow-y: auto;
+        padding: 1.25rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        scroll-behavior: smooth;
+    }
+
+    /* Custom Scrollbar for Viewport */
+    .console-viewport::-webkit-scrollbar {
+        width: 4px;
+    }
+    .console-viewport::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .console-viewport::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 99px;
+    }
+
+    .chat-bubble {
+        max-width: 80%;
+        padding: 0.65rem 0.85rem;
+        border-radius: 0.85rem;
+        font-size: 0.875rem;
+        line-height: 1.4;
+        animation: slideInBubble 0.25s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    @@keyframes slideInBubble {
+        from { opacity: 0; transform: translateY(8px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .bubble-bot {
+        background: var(--color-bg-elevated);
+        border: 1px solid var(--color-border-subtle);
+        align-self: flex-start;
+        border-bottom-left-radius: 0.25rem;
+        color: #e5e7eb;
+    }
+
+    .bubble-user {
+        background: var(--color-accent);
+        color: #ffffff;
+        align-self: flex-end;
+        border-bottom-right-radius: 0.25rem;
+        box-shadow: 0 4px 12px rgba(94, 106, 210, 0.25);
+    }
+
+    .chat-meta {
+        font-size: 0.7rem;
+        color: var(--color-text-muted);
+        margin-bottom: 0.15rem;
+        display: flex;
+        gap: 0.35rem;
+    }
+
+    .bubble-user .chat-meta {
+        color: rgba(255, 255, 255, 0.7);
+        justify-content: flex-end;
+    }
+
+    .console-input-area {
+        padding: 1rem 1.25rem;
+        border-top: 1px solid var(--color-border-subtle);
+        background: rgba(0, 0, 0, 0.2);
+        display: flex;
+        gap: 0.75rem;
+        align-items: center;
+    }
+
+    .console-input {
+        flex-grow: 1;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 0.5rem;
+        padding: 0.6rem 0.85rem;
+        color: var(--color-text-primary);
+        font-size: 0.875rem;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    .console-input:focus {
+        border-color: var(--color-accent);
+        background: rgba(255, 255, 255, 0.05);
+        box-shadow: 0 0 0 2px var(--color-accent-glow);
+    }
+
+    .console-btn {
+        background: var(--color-accent);
+        border: none;
+        color: #ffffff;
+        padding: 0.6rem 1rem;
+        border-radius: 0.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+
+    .console-btn:hover {
+        background: #4f5bbf;
+        transform: translateY(-1px);
+    }
+
+    .console-hint {
+        text-align: center;
+        font-size: 0.75rem;
+        color: var(--color-text-muted);
+        margin-top: 0.75rem;
+    }
+
+    /* Bento Grid Features Section */
+    .bento-section {
+        padding: 2rem 0 6rem 0;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 3rem;
+        letter-spacing: -0.02em;
+    }
+
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1.25rem;
+    }
+
+    .bento-card {
+        background: var(--color-bg-elevated);
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 1rem;
+        padding: 2rem;
+        backdrop-filter: blur(12px);
+        transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .bento-card:hover {
+        border-color: var(--color-border-hover);
+        transform: translateY(-2px);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Bento Grid Card Sizes */
+    .col-span-2 {
+        grid-column: span 2;
+    }
+
+    .bento-card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 0.75rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--color-border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--color-accent);
+        margin-bottom: 2rem;
+    }
+
+    .bento-card:hover .bento-card-icon {
+        color: #ffffff;
+        background: var(--color-accent);
+        border-color: var(--color-accent);
+        box-shadow: 0 0 12px var(--color-accent-glow);
+    }
+
+    .bento-card-content h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin: 0 0 0.5rem 0;
+        color: var(--color-text-primary);
+    }
+
+    .bento-card-content p {
+        font-size: 0.875rem;
+        color: var(--color-text-muted);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Features visual decorations inside bento cards */
+    .feature-visual {
+        height: 120px;
+        margin-top: 1.5rem;
+        border-radius: 0.5rem;
+        background: rgba(0, 0, 0, 0.2);
+        border: 1px solid var(--color-border-subtle);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* Signal animation visual */
+    .signal-lines {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 60px;
+    }
+
+    .signal-bar {
+        width: 8px;
+        background-color: var(--color-accent);
+        border-radius: 99px;
+        animation: bounceBar 1.2s infinite ease-in-out alternate;
+    }
+
+    .signal-bar:nth-child(1) { height: 20px; animation-delay: -0.2s; }
+    .signal-bar:nth-child(2) { height: 45px; animation-delay: -0.6s; }
+    .signal-bar:nth-child(3) { height: 30px; animation-delay: -0.4s; }
+    .signal-bar:nth-child(4) { height: 55px; animation-delay: -0.8s; }
+    .signal-bar:nth-child(5) { height: 25px; animation-delay: -0.1s; }
+
+    @@keyframes bounceBar {
+        0% { transform: scaleY(0.4); }
+        100% { transform: scaleY(1.1); }
+    }
+
+    /* Emoji float decoration */
+    .emoji-floater-container {
+        display: flex;
+        gap: 0.75rem;
+    }
+
+    .floating-emoji-item {
+        font-size: 1.75rem;
+        padding: 0.5rem;
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid var(--color-border-subtle);
+        border-radius: 0.5rem;
+        animation: floatEmoji 4s infinite ease-in-out alternate;
+    }
+
+    .floating-emoji-item:nth-child(1) { animation-delay: 0s; }
+    .floating-emoji-item:nth-child(2) { animation-delay: -1.3s; }
+    .floating-emoji-item:nth-child(3) { animation-delay: -2.6s; }
+
+    @@keyframes floatEmoji {
+        0% { transform: translateY(0) rotate(0deg); }
+        100% { transform: translateY(-8px) rotate(5deg); }
+    }
+
+    /* Upload visual file representation */
+    .upload-file-decoration {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid var(--color-border-subtle);
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        width: 70%;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .progress-bar-mock {
+        flex-grow: 1;
+        height: 6px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 99px;
+        overflow: hidden;
+    }
+
+    .progress-fill-mock {
+        width: 78%;
+        height: 100%;
+        background: var(--color-accent);
+        border-radius: 99px;
+        animation: fillMock 3s infinite ease-in-out;
+    }
+
+    @@keyframes fillMock {
+        0% { width: 0%; }
+        70% { width: 90%; }
+        100% { width: 100%; }
+    }
+
+    /* Responsive Speed scale */
+    .speed-scale {
+        display: flex;
+        width: 100%;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0 1rem;
+    }
+
+    .speed-milestone {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.7rem;
+        color: var(--color-text-muted);
+    }
+
+    .speed-number {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #ffffff;
+        margin-bottom: 0.25rem;
+    }
+
+    .speed-active {
+        color: #a5b4fc;
+        text-shadow: 0 0 8px rgba(165, 180, 252, 0.5);
+    }
+
+    /* Footer */
+    .custom-footer {
+        border-top: 1px solid var(--color-border-subtle);
+        padding: 2.5rem 0;
+        margin-top: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 0.8rem;
+        color: var(--color-text-muted);
+    }
+
+    .footer-links {
+        display: flex;
+        gap: 1.5rem;
+    }
+
+    .footer-link-item {
+        color: var(--color-text-muted);
+        text-decoration: none;
+        transition: color 0.2s ease;
+    }
+
+    .footer-link-item:hover {
+        color: var(--color-text-primary);
+    }
+
+    /* Responsive Queries */
+    @@media (max-width: 900px) {
+        .bento-grid {
+            grid-template-columns: 1fr;
+        }
+        .col-span-2 {
+            grid-column: span 1;
+        }
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        .nav-links {
+            display: none;
+        }
+        .custom-footer {
+            flex-direction: column;
+            gap: 1rem;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="ambient-background">
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+    <div class="glow-orb orb-3"></div>
 </div>
+
+<div class="landing-wrapper">
+    <!-- Custom Header Navigation -->
+    <header class="custom-header">
+        <a href="#" class="brand-logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+            </svg>
+            SignalRChatLab
+        </a>
+        <nav class="nav-links">
+            <a href="#features" class="nav-link-item">Features</a>
+            <a href="https://github.com/phanvy05032005/SignalRChatLab" target="_blank" class="nav-link-item">GitHub Repository</a>
+            <a href="/Privacy" class="nav-link-item">Privacy</a>
+        </nav>
+        <a href="/Chat" class="nav-cta">Launch Application</a>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="hero-badge">
+            <span class="online-pulse"></span>
+            SignalR Websocket Engine Connected
+        </div>
+        <h1 class="hero-title">Connect Instantly.<br>Chat Seamlessly.</h1>
+        <p class="hero-subtitle">
+            Experience real-time messaging powered by ASP.NET Core SignalR. Built with an immersive dark theme, responsive controls, file support, and an advanced emoji library.
+        </p>
+        <div class="hero-ctas">
+            <a href="/Chat" class="btn-primary-glow">
+                Start Chatting
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                </svg>
+            </a>
+            <a href="#features" class="btn-secondary-outline">Explore Features</a>
+        </div>
+    </section>
+
+    <!-- Interactive Console Preview -->
+    <div class="preview-container">
+        <div class="glass-console" id="glassConsole">
+            <div class="console-header">
+                <div class="console-dots">
+                    <div class="console-dot dot-red"></div>
+                    <div class="console-dot dot-yellow"></div>
+                    <div class="console-dot dot-green"></div>
+                </div>
+                <div class="console-title">
+                    <span class="console-status-dot"></span>
+                    Interactive Demo Console
+                </div>
+                <div style="width: 42px;"></div>
+            </div>
+            
+            <div class="console-viewport" id="consoleViewport">
+                <div class="chat-bubble bubble-bot">
+                    <div class="chat-meta">
+                        <strong>SignalR-Bot</strong> • Just now
+                    </div>
+                    Hello! Welcome to the interactive preview console. Type your name or a message below to see how responsive the interface is!
+                </div>
+            </div>
+
+            <div class="console-input-area">
+                <input type="text" class="console-input" id="consoleInput" placeholder="Type a message and press Enter..." maxlength="100" autocomplete="off" />
+                <button class="console-btn" id="consoleSendBtn" aria-label="Send message">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <p class="console-hint">Try chatting with the bot to test responsiveness in real-time!</p>
+    </div>
+
+    <!-- Bento Grid Features Showcase -->
+    <section class="bento-section" id="features">
+        <h2 class="section-title">Designed for modern communication</h2>
+        <div class="bento-grid">
+            <!-- Feature 1: SignalR WebSocket Connection -->
+            <div class="bento-card col-span-2">
+                <div class="bento-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M5 12.55a11 11 0 0 1 14.08 0"></path>
+                        <path d="M1.42 9a16 16 0 0 1 21.16 0"></path>
+                        <path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path>
+                        <circle cx="12" cy="20" r="1"></circle>
+                    </svg>
+                </div>
+                <div class="bento-card-content">
+                    <h3>Sub-millisecond latency</h3>
+                    <p>Powered by ASP.NET Core SignalR. Establishes persistent connection protocols (WebSockets, Server-Sent Events, or Long Polling) to transmit payloads instantly across users without polling overhead.</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="signal-lines">
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                        <div class="signal-bar"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 2: Messenger Emojis -->
+            <div class="bento-card">
+                <div class="bento-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                        <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                        <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                    </svg>
+                </div>
+                <div class="bento-card-content">
+                    <h3>Rich Expressiveness</h3>
+                    <p>Messenger-style emoji picker with English and Vietnamese search keywords, category sorting, and local tracking for your recently used items.</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="emoji-floater-container">
+                        <div class="floating-emoji-item">😎</div>
+                        <div class="floating-emoji-item">🔥</div>
+                        <div class="floating-emoji-item">✨</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 3: File Attachment Upload -->
+            <div class="bento-card">
+                <div class="bento-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path>
+                    </svg>
+                </div>
+                <div class="bento-card-content">
+                    <h3>Drag & Drop Files</h3>
+                    <p>Seamless file uploads directly inside the chat workspace. Supports drag and drop, displaying image previews, documents, archives, and progress indicators.</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="upload-file-decoration">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="color: var(--color-accent);">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                            <polyline points="14 2 14 8 20 8"></polyline>
+                        </svg>
+                        <div class="progress-bar-mock">
+                            <div class="progress-fill-mock"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature 4: Performance Statistics -->
+            <div class="bento-card col-span-2">
+                <div class="bento-card-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="20" x2="18" y2="10"></line>
+                        <line x1="12" y1="20" x2="12" y2="4"></line>
+                        <line x1="6" y1="20" x2="6" y2="14"></line>
+                    </svg>
+                </div>
+                <div class="bento-card-content">
+                    <h3>Premium Performance</h3>
+                    <p>Designed with micro-animations and zero content-layout shifts. Built from standard browser components, optimized to load under 300ms, and lightweight for low CPU usage.</p>
+                </div>
+                <div class="feature-visual">
+                    <div class="speed-scale">
+                        <div class="speed-milestone">
+                            <span class="speed-number">SSE</span>
+                            <span>Server-Sent Events</span>
+                        </div>
+                        <div class="speed-milestone speed-active">
+                            <span class="speed-number speed-active">WS</span>
+                            <span class="speed-active">WebSockets</span>
+                        </div>
+                        <div class="speed-milestone">
+                            <span class="speed-number">LP</span>
+                            <span>Long Polling</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="custom-footer">
+        <div>
+            &copy; 2026 - SignalRChatLab. Created by PDGPPuh.
+        </div>
+        <div class="footer-links">
+            <a href="https://github.com/phanvy05032005/SignalRChatLab" target="_blank" class="footer-link-item">Source Code</a>
+            <a href="/Privacy" class="footer-link-item">Privacy Policy</a>
+        </div>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const consoleViewport = document.getElementById('consoleViewport');
+        const consoleInput = document.getElementById('consoleInput');
+        const consoleSendBtn = document.getElementById('consoleSendBtn');
+        const glassConsole = document.getElementById('glassConsole');
+
+        let botSteps = 0;
+        const botResponses = [
+            (name) => `Great to meet you, ${name}! Yes, that message was delivered instantly. SignalR keeps a lightweight TCP connection open to ensure latency stays under 10ms.`,
+            () => `By the way, you can also paste images, upload attachments, and type custom messenger emojis in the real workspace!`,
+            () => `Click the "Launch Application" button at the top right to start a real-time session, sign in, and test it live with others!`,
+            () => `You've completed the demo! Ready to explore? Go ahead and join the live room.`
+        ];
+
+        // Soft tilt effect on console container on mouse movement
+        document.addEventListener('mousemove', (e) => {
+            const width = window.innerWidth;
+            const height = window.innerHeight;
+            const mouseX = e.clientX - width / 2;
+            const mouseY = e.clientY - height / 2;
+            
+            const rX = (mouseY / height) * 8; // Max 4 degrees rotation
+            const rY = -(mouseX / width) * 8;
+            
+            glassConsole.style.transform = `rotateX(${rX}deg) rotateY(${rY}deg) translateY(-2px)`;
+        });
+
+        // Send a message
+        const sendMessage = () => {
+            const text = consoleInput.value.trim();
+            if (!text) return;
+
+            // Render User Bubble
+            renderBubble(text, 'user', 'You');
+            consoleInput.value = '';
+
+            // Simulated response logic
+            setTimeout(() => {
+                let botReply = '';
+                if (botSteps === 0) {
+                    botReply = botResponses[0](text);
+                    botSteps++;
+                } else {
+                    const index = Math.min(botSteps, botResponses.length - 1);
+                    botReply = botResponses[index]();
+                    botSteps++;
+                }
+                renderBubble(botReply, 'bot', 'SignalR-Bot');
+            }, 800);
+        };
+
+        const renderBubble = (content, sender, senderName) => {
+            const bubbleDiv = document.createElement('div');
+            bubbleDiv.className = `chat-bubble bubble-${sender}`;
+            
+            const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            
+            bubbleDiv.innerHTML = `
+                <div class="chat-meta">
+                    <strong>${senderName}</strong> • ${time}
+                </div>
+                <div>${escapeHtml(content)}</div>
+            `;
+            
+            consoleViewport.appendChild(bubbleDiv);
+            consoleViewport.scrollTop = consoleViewport.scrollHeight;
+        };
+
+        const escapeHtml = (unsafe) => {
+            return unsafe
+                 .replace(/&/g, "&amp;")
+                 .replace(/</g, "&lt;")
+                 .replace(/>/g, "&gt;")
+                 .replace(/"/g, "&quot;")
+                 .replace(/'/g, "&#039;");
+        };
+
+        consoleInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        consoleSendBtn.addEventListener('click', sendMessage);
+    });
+</script>
