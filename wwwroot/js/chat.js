@@ -411,8 +411,8 @@ imageFileInput.addEventListener("change", () => {
             imageFileInput.value = "";
             return;
         }
-        if (file.size > 5 * 1024 * 1024) {
-            showComposerErrorBanner("Image size exceeds 5MB limit.");
+        if (file.size > 1024 * 1024 * 1024) {
+            showComposerErrorBanner("Image size exceeds 1GB limit.");
             imageFileInput.value = "";
             return;
         }
@@ -429,8 +429,8 @@ generalFileInput.addEventListener("change", () => {
             generalFileInput.value = "";
             return;
         }
-        if (file.size > 10 * 1024 * 1024) {
-            showComposerErrorBanner("File size exceeds 10MB limit.");
+        if (file.size > 1024 * 1024 * 1024) {
+            showComposerErrorBanner("File size exceeds 1GB limit.");
             generalFileInput.value = "";
             return;
         }
@@ -711,13 +711,13 @@ function validateAndProcessDroppedFile(file) {
         return;
     }
     
-    if (isImage && file.size > 5 * 1024 * 1024) {
-        showComposerErrorBanner("Image size exceeds 5MB limit.");
+    if (isImage && file.size > 1024 * 1024 * 1024) {
+        showComposerErrorBanner("Image size exceeds 1GB limit.");
         return;
     }
     
-    if (isDoc && file.size > 10 * 1024 * 1024) {
-        showComposerErrorBanner("File size exceeds 10MB limit.");
+    if (isDoc && file.size > 1024 * 1024 * 1024) {
+        showComposerErrorBanner("File size exceeds 1GB limit.");
         return;
     }
     

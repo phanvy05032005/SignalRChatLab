@@ -5,6 +5,8 @@ using SignalRChatLab.Hubs;
 
 namespace SignalRChatLab.Pages;
 
+[DisableRequestSizeLimit]
+[RequestFormLimits(MultipartBodyLengthLimit = 2147483648)] // 2 GB limit
 public class ChatModel : PageModel
 {
     private static readonly HashSet<string> ImageExtensions = new(StringComparer.OrdinalIgnoreCase)
