@@ -959,3 +959,69 @@ body {
 .chat-scroller::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.25) !important;
 }
+
+/* Chat page back button & top header overrides */
+.btn-back-home {
+  color: var(--color-on-surface-variant) !important;
+  text-decoration: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.btn-back-home:hover {
+  background-color: var(--color-surface-container) !important;
+  color: var(--color-on-surface) !important;
+  transform: translateX(-2px);
+}
+.chat-top-header {
+  background-color: var(--color-surface-subtle) !important;
+  border-bottom: 1px solid var(--color-border-default) !important;
+}
+
+/* Textarea placeholder and text color adjustments */
+.chat-composer-textarea {
+  background-color: transparent !important;
+  color: var(--color-on-surface) !important;
+}
+.chat-composer-textarea::placeholder {
+  color: var(--color-on-surface-variant) !important;
+  opacity: 0.6;
+}
+
+/* High contrast overrides for text status and connection indicators */
+.chat-wrapper .text-secondary,
+.join-chat-overlay .text-secondary {
+  color: var(--color-on-surface-variant) !important;
+}
+.chat-wrapper .status-text {
+  color: var(--color-on-surface-variant) !important;
+}
+.chat-wrapper .percent-text {
+  color: #a5b4fc !important;
+  font-weight: 600;
+}
+
+/* Progress bar inside upload container in dark mode */
+.chat-wrapper .progress {
+  background-color: rgba(255, 255, 255, 0.08) !important;
+}
+.chat-wrapper .progress-bar {
+  background-color: var(--color-primary) !important;
+}
+
+/* Dark mode inputs inside join cards */
+.join-chat-card .form-control {
+  background-color: rgba(255, 255, 255, 0.03) !important;
+  border: 1px solid var(--color-border-default) !important;
+  color: var(--color-on-surface) !important;
+  transition: all 0.2s ease;
+}
+.join-chat-card .form-control:focus {
+  background-color: rgba(255, 255, 255, 0.06) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px var(--color-accent-glow) !important;
+}
