@@ -176,10 +176,164 @@ messageInput.addEventListener("input", () => {
     }, 2000);
 });
 
-// Emoji Trigger Bindings
+// ===== Messenger-style Emoji Picker =====
+const EMOJI_DATA = {
+    smileys: {
+        label: "Mặt cười & Cảm xúc",
+        emojis: ["😀","😃","😄","😁","😆","😅","🤣","😂","🙂","🙃","😉","😊","😇","🥰","😍","🤩","😘","😗","😚","😙","🥲","😋","😛","😜","🤪","😝","🤑","🤗","🤭","🤫","🤔","🫡","🤐","🤨","😐","😑","😶","🫥","😏","😒","🙄","😬","🤥","😌","😔","😪","🤤","😴","😷","🤒","🤕","🤢","🤮","🥵","🥶","🥴","😵","🤯","🤠","🥳","🥸","😎","🤓","🧐","😕","🫤","😟","🙁","😮","😯","😲","😳","🥺","🥹","😦","😧","😨","😰","😥","😢","😭","😱","😖","😣","😞","😓","😩","😫","🥱","😤","😡","😠","🤬","😈","👿","💀","☠️","💩","🤡","👹","👺","👻","👽","👾","🤖","😺","😸","😹","😻","😼","😽","🙀","😿","😾"]
+    },
+    people: {
+        label: "Người & Cơ thể",
+        emojis: ["👋","🤚","🖐️","✋","🖖","🫱","🫲","🫳","🫴","👌","🤌","🤏","✌️","🤞","🫰","🤟","🤘","🤙","👈","👉","👆","🖕","👇","☝️","🫵","👍","👎","✊","👊","🤛","🤜","👏","🙌","🫶","👐","🤲","🤝","🙏","✍️","💅","🤳","💪","🦾","🦿","🦵","🦶","👂","🦻","👃","🧠","🫀","🫁","🦷","🦴","👀","👁️","👅","👄","🫦","👶","🧒","👦","👧","🧑","👱","👨","🧔","👩","🧓","👴","👵","🙍","🙎","🙅","🙆","💁","🙋","🧏","🙇","🤦","🤷","💆","💇","🚶","🧍","🧎","🏃","💃","🕺","👯","🧖","🧗","🤸","🏌️","🏄","🚣","🏊","⛹️","🏋️","🚴","🚵","🤼","🤽","🤾","🤺","🤹"]
+    },
+    animals: {
+        label: "Động vật & Thiên nhiên",
+        emojis: ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐻‍❄️","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🪱","🐛","🦋","🐌","🐞","🐜","🪰","🪲","🪳","🦟","🦗","🕷️","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🪸","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🦬","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐈","🐈‍⬛","🪶","🐓","🦃","🦤","🦚","🦜","🦢","🦩","🕊️","🐇","🦝","🦨","🦡","🦫","🦦","🦥","🐁","🐀","🐿️","🦔","🐾","🐉","🐲","🌵","🎄","🌲","🌳","🌴","🪵","🌱","🌿","☘️","🍀","🎍","🪴","🎋","🍃","🍂","🍁","🪺","🪹","🍄","🌾","💐","🌷","🌹","🥀","🌺","🌸","🌼","🌻","🌞","🌝","🌛","🌜","🌚","🌕","🌖","🌗","🌘","🌑","🌒","🌓","🌔","🌙","🌎","🌍","🌏","🪐","💫","⭐","🌟","✨","⚡","☄️","💥","🔥","🌪️","🌈","☀️","🌤️","⛅","🌥️","☁️","🌦️","🌧️","⛈️","🌩️","🌨️","❄️","☃️","⛄","🌬️","💨","💧","💦","🫧","☔","☂️","🌊","🌫️"]
+    },
+    food: {
+        label: "Thức ăn & Đồ uống",
+        emojis: ["🍇","🍈","🍉","🍊","🍋","🍌","🍍","🥭","🍎","🍏","🍐","🍑","🍒","🍓","🫐","🥝","🍅","🫒","🥥","🥑","🍆","🥔","🥕","🌽","🌶️","🫑","🥒","🥬","🥦","🧄","🧅","🍄","🥜","🫘","🌰","🍞","🥐","🥖","🫓","🥨","🥯","🥞","🧇","🧀","🍖","🍗","🥩","🥓","🍔","🍟","🍕","🌭","🥪","🌮","🌯","🫔","🥙","🧆","🥚","🍳","🥘","🍲","🫕","🥣","🥗","🍿","🧈","🧂","🥫","🍱","🍘","🍙","🍚","🍛","🍜","🍝","🍠","🍢","🍣","🍤","🍥","🥮","🍡","🥟","🥠","🥡","🦀","🦞","🦐","🦑","🦪","🍦","🍧","🍨","🍩","🍪","🎂","🍰","🧁","🥧","🍫","🍬","🍭","🍮","🍯","🍼","🥛","☕","🫖","🍵","🍶","🍾","🍷","🍸","🍹","🍺","🍻","🥂","🥃","🫗","🥤","🧋","🧃","🧉","🧊","🥢","🍽️","🍴","🥄","🔪","🫙","🏺"]
+    },
+    activities: {
+        label: "Hoạt động",
+        emojis: ["⚽","🏀","🏈","⚾","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🪃","🥅","⛳","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛼","🛷","⛸️","🥌","🎿","⛷️","🏂","🪂","🏋️","🤼","🤸","🤺","⛹️","🤾","🏌️","🏇","🧘","🏄","🏊","🤽","🚣","🧗","🚵","🚴","🏆","🥇","🥈","🥉","🏅","🎖️","🏵️","🎗️","🎪","🤹","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🪘","🎷","🎺","🪗","🎸","🪕","🎻","🎲","♟️","🎯","🎳","🎮","🕹️","🎰","🧩"]
+    },
+    travel: {
+        label: "Du lịch & Địa điểm",
+        emojis: ["🚗","🚕","🚙","🚌","🚎","🏎️","🚓","🚑","🚒","🚐","🛻","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍️","🛺","🚨","🚔","🚍","🚘","🚖","🛞","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩️","💺","🛰️","🚀","🛸","🚁","🛶","⛵","🚤","🛥️","🛳️","⛴️","🚢","⚓","🪝","⛽","🚧","🚦","🚥","🚏","🗺️","🗿","🗽","🗼","🏰","🏯","🏟️","🎡","🎢","🎠","⛲","⛱️","🏖️","🏝️","🏜️","🌋","⛰️","🏔️","🗻","🏕️","⛺","🛖","🏠","🏡","🏘️","🏚️","🏗️","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛️","⛪","🕌","🕍","🛕","🕋","⛩️","🛤️","🛣️","🗾","🎑","🏞️","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙️","🌃","🌌","🌉","🌁"]
+    },
+    objects: {
+        label: "Đồ vật",
+        emojis: ["⌚","📱","📲","💻","⌨️","🖥️","🖨️","🖱️","🖲️","🕹️","🗜️","💽","💾","💿","📀","📼","📷","📸","📹","🎥","📽️","🎞️","📞","☎️","📟","📠","📺","📻","🎙️","🎚️","🎛️","🧭","⏱️","⏲️","⏰","🕰️","⌛","⏳","📡","🔋","🪫","🔌","💡","🔦","🕯️","🪔","🧯","🛢️","💸","💵","💴","💶","💷","🪙","💰","💳","💎","⚖️","🪜","🧰","🪛","🔧","🔨","⚒️","🛠️","⛏️","🪚","🔩","⚙️","🪤","🧱","⛓️","🧲","🔫","💣","🧨","🪓","🔪","🗡️","⚔️","🛡️","🚬","⚰️","🪦","⚱️","🏺","🔮","📿","🧿","🪬","💈","⚗️","🔭","🔬","🕳️","🩹","🩺","🩻","🩼","💊","💉","🩸","🧬","🦠","🧫","🧪","🌡️","🧹","🪠","🧺","🧻","🚽","🪣","🧼","🫧","🪥","🧽","🧴","🛎️","🔑","🗝️","🚪","🪑","🛋️","🛏️","🛌","🧸","🪆","🖼️","🪞","🪟","🛍️","🛒","🎁","🎈","🎏","🎀","🪄","🪅","🎊","🎉","🎎","🏮","🎐","🧧","✉️","📩","📨","📧","💌","📥","📤","📦","🏷️","🪧","📪","📫","📬","📭","📮","📯","📜","📃","📄","📑","🧾","📊","📈","📉","🗒️","🗓️","📆","📅","🗑️","📇","🗃️","🗳️","🗄️","📋","📁","📂","🗂️","🗞️","📰","📓","📔","📒","📕","📗","📘","📙","📚","📖","🔖","🧷","🔗","📎","🖇️","📐","📏","🧮","📌","📍","✂️","🖊️","🖋️","✒️","🖌️","🖍️","📝","✏️","🔍","🔎","🔏","🔐","🔒","🔓"]
+    },
+    symbols: {
+        label: "Biểu tượng",
+        emojis: ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❤️‍🔥","❤️‍🩹","❣️","💕","💞","💓","💗","💖","💘","💝","💟","☮️","✝️","☪️","🕉️","☸️","✡️","🔯","🕎","☯️","☦️","🛐","⛎","♈","♉","♊","♋","♌","♍","♎","♏","♐","♑","♒","♓","🆔","⚛️","🉑","☢️","☣️","📴","📳","🈶","🈚","🈸","🈺","🈷️","✴️","🆚","💮","🉐","㊙️","㊗️","🈴","🈵","🈹","🈲","🅰️","🅱️","🆎","🆑","🅾️","🆘","❌","⭕","🛑","⛔","📛","🚫","💯","💢","♨️","🚷","🚯","🚳","🚱","🔞","📵","🚭","❗","❕","❓","❔","‼️","⁉️","🔅","🔆","〽️","⚠️","🚸","🔱","⚜️","🔰","♻️","✅","🈯","💹","❇️","✳️","❎","🌐","💠","Ⓜ️","🌀","💤","🏧","🚾","♿","🅿️","🛗","🈳","🈂️","🛂","🛃","🛄","🛅","🚹","🚺","🚼","⚧️","🚻","🚮","🎦","📶","🈁","🔣","ℹ️","🔤","🔡","🔠","🆖","🆗","🆙","🆒","🆕","🆓","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟","🔢","#️⃣","*️⃣","⏏️","▶️","⏸️","⏯️","⏹️","⏺️","⏭️","⏮️","⏩","⏪","⏫","⏬","◀️","🔼","🔽","➡️","⬅️","⬆️","⬇️","↗️","↘️","↙️","↖️","↕️","↔️","↪️","↩️","⤴️","⤵️","🔀","🔁","🔂","🔄","🔃","🎵","🎶","➕","➖","➗","✖️","🟰","♾️","💲","💱","™️","©️","®️","👁️‍🗨️","🔚","🔙","🔛","🔝","🔜","〰️","➰","➿","✔️","☑️","🔘","🔴","🟠","🟡","🟢","🔵","🟣","⚫","⚪","🟤","🔺","🔻","🔸","🔹","🔶","🔷","🔳","🔲","▪️","▫️","◾","◽","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛","⬜","🟫","🔈","🔇","🔉","🔊","🔔","🔕","📣","📢","💬","💭","🗯️","♠️","♣️","♥️","♦️","🃏","🎴","🀄","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕧"]
+    },
+    flags: {
+        label: "Cờ",
+        emojis: ["🏳️","🏴","🏁","🚩","🏳️‍🌈","🏳️‍⚧️","🏴‍☠️","🇻🇳","🇺🇸","🇬🇧","🇫🇷","🇩🇪","🇯🇵","🇰🇷","🇨🇳","🇹🇭","🇮🇩","🇵🇭","🇲🇾","🇸🇬","🇱🇦","🇰🇭","🇲🇲","🇮🇳","🇧🇷","🇲🇽","🇨🇦","🇦🇺","🇷🇺","🇮🇹","🇪🇸","🇵🇹","🇳🇱","🇧🇪","🇨🇭","🇦🇹","🇸🇪","🇳🇴","🇩🇰","🇫🇮","🇮🇪","🇵🇱","🇬🇷","🇹🇷","🇪🇬","🇿🇦","🇳🇬","🇰🇪","🇦🇷","🇨🇱","🇨🇴","🇵🇪","🇻🇪","🇪🇨","🇺🇾","🇵🇾","🇧🇴","🇵🇦","🇨🇷","🇨🇺","🇩🇴","🇵🇷","🇭🇹","🇯🇲","🇹🇹","🇧🇸","🇧🇧","🇬🇾","🇸🇷","🇧🇿","🇬🇹","🇭🇳","🇸🇻","🇳🇮","🇦🇪","🇸🇦","🇶🇦","🇰🇼","🇧🇭","🇴🇲","🇯🇴","🇱🇧","🇮🇶","🇮🇷","🇮🇱","🇵🇸","🇳🇿","🇫🇯","🇵🇬","🇼🇸","🇹🇴","🇹🇻","🇳🇷","🇰🇮","🇲🇭","🇫🇲","🇵🇼","🇺🇳"]
+    }
+};
+
+// Search keywords map for emoji search (Vietnamese + English)
+const EMOJI_KEYWORDS = {
+    "😀": "cuoi smile grin happy vui","😃": "cuoi smile happy","😄": "cuoi smile laugh","😁": "cuoi beam grin","😆": "cuoi laugh ha","😅": "cuoi sweat nervous","🤣": "cuoi rolling floor","😂": "cuoi joy tears khoc","🙂": "cuoi slight","🙃": "lat upside","😉": "nháy mắt wink","😊": "cuoi blush smile","😇": "thien than angel halo","🥰": "yeu love hearts","😍": "yeu love heart eyes","🤩": "star struck sao","😘": "hon kiss","😗": "hon kiss","😚": "hon kiss","😙": "hon kiss","😋": "yum delicious ngon","😛": "le luoi tongue","😜": "nháy mắt wink tongue","🤪": "dien crazy zany","😝": "le luoi tongue squint","🤗": "om hug","🤔": "suy nghi thinking hmm","🤐": "im lang zip mouth","🤨": "ngo nghi raised eyebrow","😐": "binh thuong neutral","😏": "cuoi smirk","😒": "chan unamused","🙄": "eye roll","😬": "grimace","😌": "binh tinh relieved","😔": "buon sad pensive","😪": "buon ngu sleepy","😴": "ngu sleeping zzz","😷": "mask khau trang","🤒": "om sick thermometer","🤕": "bi thuong injured bandage","🤢": "buon non nauseated","🤮": "non vomiting","🥵": "nong hot","🥶": "lanh cold freezing","🥴": "say drunk woozy","🤯": "no oc mind blown exploding","🥳": "tiec party celebration","😎": "cool sunglasses","🤓": "nerd glasses","😕": "confused bon roi","😟": "lo lang worried","😮": "ngac nhien surprised open mouth","😲": "ngac nhien astonished","😳": "xau ho flushed","🥺": "xin please pleading","😢": "khoc cry sad","😭": "khoc crying loud","😱": "so hai scream fear","😤": "tuc gian angry huff","😡": "gian angry red","😠": "gian angry","🤬": "chui cursing","😈": "quy devil smile","👿": "quy devil angry","💀": "dau lau skull dead","💩": "poop phan","🤡": "he clown","👻": "ma ghost boo","👽": "nguoi ngoai hanh tinh alien","👾": "quai vat alien monster","🤖": "robot","❤️": "tim do love red heart yeu","🔥": "lua fire hot","👍": "tot like thumb up","👎": "khong like thumb down","👏": "vo tay clap","🙏": "cam on pray thanks please","💪": "co bap muscle strong","✨": "sparkles lap lanh","💯": "tram diem hundred perfect","🎉": "tiec party popper celebration chuc mung","🎊": "confetti celebration"
+};
+
+// Recent emojis (persisted in localStorage)
+const RECENT_STORAGE_KEY = "signalrchatlab_recent_emojis";
+const MAX_RECENT = 24;
+
+function getRecentEmojis() {
+    try {
+        const stored = localStorage.getItem(RECENT_STORAGE_KEY);
+        return stored ? JSON.parse(stored) : [];
+    } catch { return []; }
+}
+
+function addRecentEmoji(emoji) {
+    let recent = getRecentEmojis();
+    recent = recent.filter(e => e !== emoji);
+    recent.unshift(emoji);
+    if (recent.length > MAX_RECENT) recent = recent.slice(0, MAX_RECENT);
+    try { localStorage.setItem(RECENT_STORAGE_KEY, JSON.stringify(recent)); } catch {}
+}
+
+// Build and render the emoji grid
+function renderEmojiGrid(filter = "") {
+    const container = document.getElementById("emojiGridContainer");
+    const noResults = document.getElementById("emojiNoResults");
+    container.innerHTML = "";
+    let totalRendered = 0;
+    
+    const filterLower = filter.toLowerCase().trim();
+
+    // Recent section
+    if (!filterLower) {
+        const recent = getRecentEmojis();
+        if (recent.length > 0) {
+            const section = createEmojiSection("recent", "Gần đây", recent);
+            container.appendChild(section);
+            totalRendered += recent.length;
+        }
+    }
+
+    // Category sections
+    for (const [catKey, catData] of Object.entries(EMOJI_DATA)) {
+        let emojis = catData.emojis;
+        
+        if (filterLower) {
+            emojis = emojis.filter(e => {
+                const kw = EMOJI_KEYWORDS[e] || "";
+                return e.includes(filterLower) || kw.includes(filterLower);
+            });
+        }
+        
+        if (emojis.length === 0) continue;
+        
+        const section = createEmojiSection(catKey, catData.label, emojis);
+        container.appendChild(section);
+        totalRendered += emojis.length;
+    }
+    
+    if (totalRendered === 0) {
+        noResults.classList.remove("d-none");
+        container.style.display = "none";
+    } else {
+        noResults.classList.add("d-none");
+        container.style.display = "";
+    }
+}
+
+function createEmojiSection(catKey, label, emojis) {
+    const section = document.createElement("div");
+    section.className = "emoji-section";
+    section.dataset.category = catKey;
+    
+    const header = document.createElement("div");
+    header.className = "emoji-section-header";
+    header.textContent = label;
+    section.appendChild(header);
+    
+    const grid = document.createElement("div");
+    grid.className = "emoji-grid";
+    
+    emojis.forEach(emoji => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "emoji-picker-btn";
+        btn.textContent = emoji;
+        btn.addEventListener("click", () => {
+            insertAtCursor(messageInput, emoji);
+            addRecentEmoji(emoji);
+            emojiPopover.classList.add("d-none");
+            messageInput.focus();
+            
+            // Trigger manual input event to emit typing status
+            const event = new Event('input', { bubbles: true });
+            messageInput.dispatchEvent(event);
+        });
+        grid.appendChild(btn);
+    });
+    
+    section.appendChild(grid);
+    return section;
+}
+
+// Emoji Picker open/close
 emojiTriggerBtn.addEventListener("click", (e) => {
     e.stopPropagation();
-    emojiPopover.classList.toggle("d-none");
+    const isHidden = emojiPopover.classList.contains("d-none");
+    if (isHidden) {
+        renderEmojiGrid();
+        emojiPopover.classList.remove("d-none");
+        document.getElementById("emojiSearchInput").value = "";
+        document.getElementById("emojiSearchInput").focus();
+        updateActiveTab("recent");
+    } else {
+        emojiPopover.classList.add("d-none");
+    }
 });
 
 document.addEventListener("click", (e) => {
@@ -188,17 +342,56 @@ document.addEventListener("click", (e) => {
     }
 });
 
-emojiPopover.querySelectorAll(".emoji-picker-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-        insertAtCursor(messageInput, btn.textContent);
-        emojiPopover.classList.add("d-none");
-        messageInput.focus();
-        
-        // Trigger manual input event to emit typing status
-        const event = new Event('input', { bubbles: true });
-        messageInput.dispatchEvent(event);
-    });
+// Search input
+document.getElementById("emojiSearchInput").addEventListener("input", (e) => {
+    renderEmojiGrid(e.target.value);
 });
+
+// Category tab clicks
+document.getElementById("emojiCategoryTabs").addEventListener("click", (e) => {
+    const tabBtn = e.target.closest(".emoji-tab-btn");
+    if (!tabBtn) return;
+    
+    const category = tabBtn.dataset.category;
+    updateActiveTab(category);
+    
+    // Clear search
+    document.getElementById("emojiSearchInput").value = "";
+    renderEmojiGrid();
+    
+    // Scroll to section
+    const container = document.getElementById("emojiGridContainer");
+    const section = container.querySelector(`.emoji-section[data-category="${category}"]`);
+    if (section) {
+        section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+});
+
+// Track scroll to update active tab
+document.getElementById("emojiGridContainer").addEventListener("scroll", () => {
+    const container = document.getElementById("emojiGridContainer");
+    const sections = container.querySelectorAll(".emoji-section");
+    let activeCategory = null;
+    
+    for (const section of sections) {
+        const rect = section.getBoundingClientRect();
+        const containerRect = container.getBoundingClientRect();
+        if (rect.top <= containerRect.top + 40) {
+            activeCategory = section.dataset.category;
+        }
+    }
+    
+    if (activeCategory) {
+        updateActiveTab(activeCategory);
+    }
+});
+
+function updateActiveTab(category) {
+    const tabs = document.querySelectorAll(".emoji-tab-btn");
+    tabs.forEach(tab => {
+        tab.classList.toggle("active", tab.dataset.category === category);
+    });
+}
 
 // Upload Trigger buttons
 imageTriggerBtn.addEventListener("click", () => {

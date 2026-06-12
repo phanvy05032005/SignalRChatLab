@@ -167,25 +167,34 @@
                     <input id="generalFileInput" type="file" accept=".pdf,.docx,.txt,.zip" class="d-none" />
                 </form>
 
-                <!-- Floating Emoji Grid Popover -->
+                <!-- Floating Emoji Picker Popover (Messenger-style) -->
                 <div id="emojiPopover" class="emoji-picker-popover d-none">
-                    <div class="emoji-grid">
-                        <button type="button" class="emoji-picker-btn">😀</button>
-                        <button type="button" class="emoji-picker-btn">😂</button>
-                        <button type="button" class="emoji-picker-btn">😍</button>
-                        <button type="button" class="emoji-picker-btn">👍</button>
-                        <button type="button" class="emoji-picker-btn">🎉</button>
-                        <button type="button" class="emoji-picker-btn">🔥</button>
-                        <button type="button" class="emoji-picker-btn">❤️</button>
-                        <button type="button" class="emoji-picker-btn">🙏</button>
-                        <button type="button" class="emoji-picker-btn">🤔</button>
-                        <button type="button" class="emoji-picker-btn">😎</button>
-                        <button type="button" class="emoji-picker-btn">🚀</button>
-                        <button type="button" class="emoji-picker-btn">👏</button>
-                        <button type="button" class="emoji-picker-btn">✨</button>
-                        <button type="button" class="emoji-picker-btn">💡</button>
-                        <button type="button" class="emoji-picker-btn">💯</button>
-                        <button type="button" class="emoji-picker-btn">😭</button>
+                    <!-- Search Bar -->
+                    <div class="emoji-search-wrapper">
+                        <span class="material-symbols-outlined emoji-search-icon">search</span>
+                        <input id="emojiSearchInput" type="text" class="emoji-search-input" placeholder="Tìm kiếm biểu tượng" autocomplete="off" />
+                    </div>
+                    <!-- Category Tabs -->
+                    <div class="emoji-category-tabs" id="emojiCategoryTabs">
+                        <button type="button" class="emoji-tab-btn active" data-category="recent" title="Gần đây">🕐</button>
+                        <button type="button" class="emoji-tab-btn" data-category="smileys" title="Mặt cười & Cảm xúc">😀</button>
+                        <button type="button" class="emoji-tab-btn" data-category="people" title="Người & Cơ thể">👋</button>
+                        <button type="button" class="emoji-tab-btn" data-category="animals" title="Động vật & Thiên nhiên">🐻</button>
+                        <button type="button" class="emoji-tab-btn" data-category="food" title="Thức ăn & Đồ uống">🍔</button>
+                        <button type="button" class="emoji-tab-btn" data-category="activities" title="Hoạt động">⚽</button>
+                        <button type="button" class="emoji-tab-btn" data-category="travel" title="Du lịch & Địa điểm">🚗</button>
+                        <button type="button" class="emoji-tab-btn" data-category="objects" title="Đồ vật">💡</button>
+                        <button type="button" class="emoji-tab-btn" data-category="symbols" title="Biểu tượng">❤️</button>
+                        <button type="button" class="emoji-tab-btn" data-category="flags" title="Cờ">🏳️</button>
+                    </div>
+                    <!-- Emoji Grid Container (scrollable) -->
+                    <div class="emoji-grid-container chat-scroller" id="emojiGridContainer">
+                        <!-- Populated dynamically by JS -->
+                    </div>
+                    <!-- No Results -->
+                    <div id="emojiNoResults" class="emoji-no-results d-none">
+                        <span class="material-symbols-outlined text-muted" style="font-size: 2rem;">sentiment_dissatisfied</span>
+                        <span class="text-muted small">Không tìm thấy emoji</span>
                     </div>
                 </div>
 
